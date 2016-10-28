@@ -5,6 +5,7 @@ react-native aliyun oss
 # 安装
 ```
 npm install git+https://github.com/lesonli/react-native-aliyun-oss.git --save
+react-native link
 ```
 # 引入Framework
 
@@ -20,12 +21,6 @@ OSS移动端SDK为了解决无线网络下域名解析容易遭到劫持的问�
 libresolv.tbd
 SystemConfiguration.framework
 ```
-
-# 引入 RCTAliyunOSS
-
-拖入 RCTAliyunOSS.xcodeproj 到工程目录的 Libraries中
-
-项目build Phases -> Link Binary With Libraries 中添加 libRCTAliyunOSS.a
 
 # 使用
 
