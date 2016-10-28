@@ -1,0 +1,16 @@
+{
+  "name": "react-native-aliyun-oss",
+  "version": "1.0.0",
+  "description": "upload file to aliyun oss",
+  "main": "index",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lotosbin/react-native-aliyun-oss.git"
+  },
+  "keywords": [
+    "aliyun",
+    "oss"
+  ],
+  "author": "lesonli",
+  "license": "MIT"
+}
