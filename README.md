@@ -54,3 +54,11 @@ updateDate:date};
     AliyunOSS.removeEventListener('uploadProgress',uploadProgress);
   });
 ```
+
+# 注意
+AliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用
+
+正式环境请使用服务器签名，app调用AliyunOSS.initWithSigner
+
+详细用法参考index.ios.js中的注释
+
