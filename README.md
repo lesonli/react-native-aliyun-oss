@@ -68,3 +68,5 @@ AliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用
 
 详细用法参考index.ios.js中的注释
 
+当前版本只封装了下载功能，后续更新下载功能
+
