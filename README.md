@@ -21,6 +21,12 @@ libresolv.tbd
 SystemConfiguration.framework
 ```
 
+# 引入 RCTAliyunOSS
+
+拖入 RCTAliyunOSS.xcodeproj 到工程目录的 Libraries中
+
+项目build Phases -> Link Binary With Libraries 中添加 libRCTAliyunOSS.a
+
 # 使用
 
 ```
