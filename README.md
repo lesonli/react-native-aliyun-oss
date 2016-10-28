@@ -1,16 +1,56 @@
 # react-native-aliyun-oss
 
-[![Join the chat at https://gitter.im/lotosbin/react-native-aliyun-oss](https://badges.gitter.im/lotosbin/react-native-aliyun-oss.svg)](https://gitter.im/lotosbin/react-native-aliyun-oss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 react-native aliyun oss
 
-# usage
+# 安装
 ```
-npm install git+https://github.com/lotosbin/react-native-aliyun-oss.git --save
+npm install git+https://github.com/lesonli/react-native-aliyun-oss.git --save
 ```
-```Podfile
-  pod 'AliyunOSSiOS'
+# 引入Framework
+
+需要引入OSS iOS SDK framework。
+在Xcode中，直接把framework拖入您对应的Target下即可，在弹出框勾选Copy items if needed。
+
+注意，引入Framework后，需要在工程Build Settings的Other Linker Flags中加入-ObjC。如果工程此前已经设置过-force_load选项，那么，需要加入-force_load <framework path>/AliyunOSSiOS。
+
+# 兼容IPv6-Only网络
+
+OSS移动端SDK为了解决无线网络下域名解析容易遭到劫持的问题，已经引入了HTTPDNS进行域名解析，直接使用IP请求OSS服务端。在IPv6-Only的网络下，可能会遇到兼容性问题。而APP官方近期发布了关于IPv6-only网络环境兼容的APP审核要求，为此，SDK从2.5.0版本开始已经做了兼容性处理。在新版本中，除了-ObjC的设置，还需要引入两个系统库：
+```
+libresolv.tbd
+SystemConfiguration.framework
 ```
 
-# other
-- https://github.com/xieshuigeng/react-native-aliyun-oss
-- https://github.com/whtoo/react-native-aliyun-oss
+# 使用
+
+```
+
+import AliyunOSS from 'react-native-aliyun-oss'
+
+AliyunOSS.enableOSSLog();
+
+    let key_conf = {
+      AccessKey:'xxxxxxx',
+      SecretKey:'xxxxxxxxxxxxxx',
+    };
+    let EndPoint = 'https://oss-cn-qingdao.aliyuncs.com'; 
+    AliyunOSS.initWithKey(key_conf,EndPoint);
+    
+   ...
+   
+   let date = new Date();
+      date = date.toGMTString();
+ 
+    let upload_conf = {
+bucketName:'xxxx',
+sourceFile:'',
+ossFile:'test/file1m',
+updateDate:date};
+    let uploadProgress = data => console.log(data);
+  AliyunOSS.addEventListener('uploadProgress',uploadProgress);
+  AliyunOSS.uploadObjectAsync(upload_conf)
+  .then((resp) => {
+    console.log(resp);
+    AliyunOSS.removeEventListener('uploadProgress',uploadProgress);
+  });
+```
