@@ -68,20 +68,17 @@ const AliyunOSS = {
     	return false;
     }
     _subscriptions.set(handler, listener);
-    console.log(_subscriptions.size);
   },
   removeEventListener(type, handler) {
   	if(type !== UPLOAD_EVENT && type !== DOWNLOAD_EVENT){
   		return false;
   	}
     var listener = _subscriptions.get(handler);
-    console.log(_subscriptions.size);
     if (!listener) {
       return;
     }
     listener.remove();
     _subscriptions.delete(handler);
-    console.log(_subscriptions.size);
   }
 };
 
