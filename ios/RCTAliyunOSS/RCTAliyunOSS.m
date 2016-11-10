@@ -124,9 +124,9 @@ RCT_EXPORT_METHOD(uploadObjectAsync:(NSString *)BucketName
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
         [self.bridge.eventDispatcher sendAppEventWithName:@"uploadProgress"
                                                      body:@{
-                                                            @"bytesSent":[NSString stringWithFormat:@"%lld",bytesSent],
-                                                            @"totalByteSent": [NSString stringWithFormat:@"%lld",totalByteSent],
-                                                            @"totalBytesExpectedToSend": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+                                                            @"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
+                                                            @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
+                                                            @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
     };
     //put.contentType = @"";
     //put.contentMd5 = @"";

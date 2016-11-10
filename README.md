@@ -7,7 +7,7 @@ react-native aliyun oss
 npm install git+https://github.com/lesonli/react-native-aliyun-oss.git --save
 react-native link
 ```
-# 引入Framework
+# (IOS)引入Framework
 
 需要引入OSS iOS SDK framework。
 在Xcode中，直接把framework拖入您对应的Target下即可，在弹出框勾选Copy items if needed。
@@ -61,7 +61,7 @@ AliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用
 
 正式环境请使用服务器签名，app调用AliyunOSS.initWithSigner
 
-详细用法参考index.ios.js中的注释
+详细用法参考index.js中的注释
 
-当前版本只封装了下载功能，后续更新下载功能
+当前版本只封装了上传功能，后续更新下载功能
 
