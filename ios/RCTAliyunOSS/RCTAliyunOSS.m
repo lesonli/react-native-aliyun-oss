@@ -8,8 +8,7 @@
 
 #import "RCTAliyunOSS.h"
 #import "RCTLog.h"
-#import "RCTEventDispatcher.h"
-#import <AliyunOSSiOS/OSSService.h>
+#import "OSSService.h"
 
 
 @implementation RCTAliyunOSS{
@@ -18,7 +17,9 @@
  
 }
 
-@synthesize bridge=_bridge;
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"uploadProgress"];
+}
 
 RCT_EXPORT_MODULE()
 
@@ -103,7 +104,7 @@ RCT_EXPORT_METHOD(initWithSigner:(NSString *)AccessKey
 }*/
 
 //异步上传
-RCT_EXPORT_METHOD(uploadObjectAsync:(NSString *)BucketName
+RCT_REMAP_METHOD(uploadObjectAsync, bucketName:(NSString *)BucketName
                   SourceFile:(NSString *)SourceFile
                   OssFile:(NSString *)OssFile
                   UpdateDate:(NSString *)UpdateDate
@@ -122,11 +123,10 @@ RCT_EXPORT_METHOD(uploadObjectAsync:(NSString *)BucketName
     // optional fields
     put.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
-        [self.bridge.eventDispatcher sendAppEventWithName:@"uploadProgress"
-                                                     body:@{
-                                                            @"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
-                                                            @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
-                                                            @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+        [self sendEventWithName: @"uploadProgress" body:@{@"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
+                                                          @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
+                                                          @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+
     };
     //put.contentType = @"";
     //put.contentMd5 = @"";
