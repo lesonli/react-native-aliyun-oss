@@ -30,31 +30,48 @@ import AliyunOSS from 'react-native-aliyun-oss'
 
 AliyunOSS.enableOSSLog();
 
-    let key_conf = {
-      AccessKey:'xxxxxxx',
-      SecretKey:'xxxxxxxxxxxxxx',
-    };
-    let EndPoint = 'https://oss-cn-qingdao.aliyuncs.com'; 
-    AliyunOSS.initWithKey(key_conf,EndPoint);
-    
-   ...
-   
-   let date = new Date();
-      date = date.toGMTString();
+let key_conf = {
+  AccessKey:'xxxxxxx',
+  SecretKey:'xxxxxxxxxxxxxx',
+};
+let EndPoint = 'https://oss-cn-qingdao.aliyuncs.com'; 
+AliyunOSS.initWithKey(key_conf,EndPoint);
+
+...
+
+let date = new Date();
+  date = date.toGMTString();
  
-    let upload_conf = {
-bucketName:'xxxx',
-sourceFile:'',
-ossFile:'test/file1m',
-updateDate:date};
-    let uploadProgress = data => console.log(data);
-  AliyunOSS.addEventListener('uploadProgress',uploadProgress);
-  AliyunOSS.uploadObjectAsync(upload_conf)
-  .then((resp) => {
-    console.log(resp);
-    AliyunOSS.removeEventListener('uploadProgress',uploadProgress);
-  });
+let upload_conf = {
+  bucketName:'xxxx',
+  sourceFile:'',
+  ossFile:'test/file1m',
+  updateDate:date};
+let uploadProgress = data => console.log(data);
+
+AliyunOSS.addEventListener('uploadProgress',uploadProgress);
+AliyunOSS.uploadObjectAsync(upload_conf)
+.then((resp) => {
+  console.log(resp);
+  AliyunOSS.removeEventListener('uploadProgress',uploadProgress);
+});
+
+...
+
+let download_conf = {
+  bucketName:'xxxx',
+  ossFile:'test/file1m',
+  updateDate:date};
+let downloadProgress = data => console.log(data);
+
+AliyunOSS.addEventListener('downloadProgress',downloadProgress);
+AliyunOSS.uploadObjectAsync(download_conf)
+.then((resp) => {
+  console.log(resp);
+  AliyunOSS.removeEventListener('downloadProgress',downloadProgress);
+});
 ```
+
 
 # 注意
 AliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用
@@ -62,6 +79,4 @@ AliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用
 正式环境请使用服务器签名，app调用AliyunOSS.initWithSigner
 
 详细用法参考index.js中的注释
-
-当前版本只封装了上传功能，后续更新下载功能
 
