@@ -201,6 +201,15 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
                         try{
                             outputStream.write(buffer,0,len);
                             readSize += len;
+
+                            String str_currentSize = Long.toString(readSize);
+                            String str_totalSize = Long.toString(resultLength);
+                            WritableMap onProgressValueData = Arguments.createMap();
+                            onProgressValueData.putString("currentSize", str_currentSize);
+                            onProgressValueData.putString("totalSize", str_totalSize);
+                            getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                                    .emit("downloadProgress", onProgressValueData);
+
                         }catch (IOException e) {
                             e.printStackTrace();
                             promise.reject("DownloadFaile", e);
