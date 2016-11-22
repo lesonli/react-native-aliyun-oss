@@ -57,13 +57,13 @@ const AliyunOSS = {
 
   /*监听上传和下载事件，
   **返回对象3个属性
-  *bytesSent:每次上传字节
-  *totalByteSent:当前总共上传字节
-  *totalBytesExpectedToSend:总共需要发送的字节
+  *everySentSize:每次上传／下载字节
+  *currentSize:当前所需上传／下载字节
+  *totalSize:总字节
   */
   addEventListener(type, handler) {
     var listener;
-    if (Platform === 'ios') {
+    if (Platform.OS === 'ios') {
       const Emitter = new NativeEventEmitter(NativeAliyunOSS);
       if (type === UPLOAD_EVENT) {
         listener = Emitter.addListener(

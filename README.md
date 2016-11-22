@@ -7,12 +7,6 @@ react-native aliyun oss
 npm install git+https://github.com/lesonli/react-native-aliyun-oss.git --save
 react-native link
 ```
-# (IOS)引入Framework
-
-需要引入OSS iOS SDK framework。
-在Xcode中，直接把framework拖入您对应的Target下即可，在弹出框勾选Copy items if needed。
-
-注意，引入Framework后，需要在工程Build Settings的Other Linker Flags中加入-ObjC。如果工程此前已经设置过-force_load选项，那么，需要加入-force_load <framework path>/AliyunOSSiOS。
 
 # 兼容IPv6-Only网络
 
@@ -29,46 +23,43 @@ SystemConfiguration.framework
 import AliyunOSS from 'react-native-aliyun-oss'
 
 AliyunOSS.enableOSSLog();
-
-let key_conf = {
-  AccessKey:'xxxxxxx',
-  SecretKey:'xxxxxxxxxxxxxx',
+const config = {
+  AccessKey: '',
+  SecretKey: '',
 };
-let EndPoint = 'https://oss-cn-qingdao.aliyuncs.com'; 
-AliyunOSS.initWithKey(key_conf,EndPoint);
+const endPoint = '';
+AliyunOSS.initWithKey(config, endPoint);
 
 ...
 
-let date = new Date();
-  date = date.toGMTString();
- 
-let upload_conf = {
-  bucketName:'xxxx',
-  sourceFile:'',
-  ossFile:'test/file1m',
-  updateDate:date};
-let uploadProgress = data => console.log(data);
-
-AliyunOSS.addEventListener('uploadProgress',uploadProgress);
-AliyunOSS.uploadObjectAsync(upload_conf)
-.then((resp) => {
-  console.log(resp);
-  AliyunOSS.removeEventListener('uploadProgress',uploadProgress);
-});
+// upload
+const uploadConfig = {
+  bucketName: '',
+  sourceFile: '', // local file name
+  ossFile: '' // the file path uploaded to oss
+};
+const uploadProgress = p => console.log(p.currentSize / p.totalSize);
+AliyunOSS.addEventListener('uploadProgress', uploadProgress);
+await AliyunOSS.uploadObjectAsync(uploadConfig)
+  .then((resp) => {
+    console.log(resp);
+    AliyunOSS.removeEventListener('uploadProgress', uploadProgress);
+  });
 
 ...
 
-let download_conf = {
-  bucketName:'xxxx',
-  ossFile:'test/file1m',
-  updateDate:date};
-let downloadProgress = data => console.log(data);
-
-AliyunOSS.addEventListener('downloadProgress',downloadProgress);
-AliyunOSS.uploadObjectAsync(download_conf)
-.then((resp) => {
-  console.log(resp);
-  AliyunOSS.removeEventListener('downloadProgress',downloadProgress);
+// download
+const downloadConfig = {
+      bucketName: '',
+      ossFile: ''
+    };
+const downloadProgress = p => console.log(p.currentSize / p.totalSize);
+AliyunOSS.addEventListener('downloadProgress', downloadProgress);
+await AliyunOSS.downloadObjectAsync(downloadConfig).then(path => {
+  console.log(path); // the local file path downloaded from oss
+  AliyunOSS.removeEventListener('downloadProgress', downloadProgress);
+}).catch((error) => {
+  console.error(error);
 });
 ```
 

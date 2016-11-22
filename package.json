@@ -1,29 +1,83 @@
 {
-  "name": "react-native-aliyun-oss",
-  "version": "1.0.0",
-  "description": "upload file to aliyun oss",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lotosbin/react-native-aliyun-oss.git"
+  "_args": [
+    [
+      {
+        "raw": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+        "spec": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:lesonli/react-native-aliyun-oss.git",
+          "sshUrl": "git+ssh://git@github.com/lesonli/react-native-aliyun-oss.git",
+          "httpsUrl": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+          "gitUrl": "git://github.com/lesonli/react-native-aliyun-oss.git",
+          "shortcut": "github:lesonli/react-native-aliyun-oss",
+          "directUrl": "https://raw.githubusercontent.com/lesonli/react-native-aliyun-oss/master/package.json"
+        }
+      },
+      "/Users/iou90/Works/Lab/react-native-lab/lab"
+    ]
+  ],
+  "_from": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+  "_id": "react-native-aliyun-oss@1.0.0",
+  "_inCache": true,
+  "_location": "/react-native-aliyun-oss",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+    "spec": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:lesonli/react-native-aliyun-oss.git",
+      "sshUrl": "git+ssh://git@github.com/lesonli/react-native-aliyun-oss.git",
+      "httpsUrl": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+      "gitUrl": "git://github.com/lesonli/react-native-aliyun-oss.git",
+      "shortcut": "github:lesonli/react-native-aliyun-oss",
+      "directUrl": "https://raw.githubusercontent.com/lesonli/react-native-aliyun-oss/master/package.json"
+    }
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/lesonli/react-native-aliyun-oss.git#d0ca918dd141270518f41418231f5569d81c0410",
+  "_shasum": "4e5481a9a52586d91dd438d70ff56cf0ff86348d",
+  "_shrinkwrap": null,
+  "_spec": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
+  "_where": "/Users/iou90/Works/Lab/react-native-lab/lab",
+  "author": {
+    "name": "lesonli"
+  },
+  "bugs": {
+    "url": "https://github.com/lotosbin/react-native-aliyun-oss/issues"
+  },
+  "dependencies": {},
+  "description": "upload file to aliyun oss",
+  "devDependencies": {},
+  "gitHead": "8995696bfa55c285fee262b86693333f1200f6f9",
+  "homepage": "https://github.com/lotosbin/react-native-aliyun-oss#readme",
   "keywords": [
     "aliyun",
     "oss"
   ],
-  "author": {
-    "name": "lesonli"
-  },
   "license": "MIT",
-  "gitHead": "8995696bfa55c285fee262b86693333f1200f6f9",
+  "main": "index.js",
+  "name": "react-native-aliyun-oss",
+  "optionalDependencies": {},
   "readme": "# react-native-aliyun-oss\n\nreact-native aliyun oss\n\n# 安装\n```\nnpm install git+https://github.com/lesonli/react-native-aliyun-oss.git --save\nreact-native link\n```\n# 引入Framework\n\n需要引入OSS iOS SDK framework。\n在Xcode中，直接把framework拖入您对应的Target下即可，在弹出框勾选Copy items if needed。\n\n注意，引入Framework后，需要在工程Build Settings的Other Linker Flags中加入-ObjC。如果工程此前已经设置过-force_load选项，那么，需要加入-force_load <framework path>/AliyunOSSiOS。\n\n# 兼容IPv6-Only网络\n\nOSS移动端SDK为了解决无线网络下域名解析容易遭到劫持的问题，已经引入了HTTPDNS进行域名解析，直接使用IP请求OSS服务端。在IPv6-Only的网络下，可能会遇到兼容性问题。而APP官方近期发布了关于IPv6-only网络环境兼容的APP审核要求，为此，SDK从2.5.0版本开始已经做了兼容性处理。在新版本中，除了-ObjC的设置，还需要引入两个系统库：\n```\nlibresolv.tbd\nSystemConfiguration.framework\n```\n\n# 使用\n\n```\n\nimport AliyunOSS from 'react-native-aliyun-oss'\n\nAliyunOSS.enableOSSLog();\n\n    let key_conf = {\n      AccessKey:'xxxxxxx',\n      SecretKey:'xxxxxxxxxxxxxx',\n    };\n    let EndPoint = 'https://oss-cn-qingdao.aliyuncs.com'; \n    AliyunOSS.initWithKey(key_conf,EndPoint);\n    \n   ...\n   \n   let date = new Date();\n      date = date.toGMTString();\n \n    let upload_conf = {\nbucketName:'xxxx',\nsourceFile:'',\nossFile:'test/file1m',\nupdateDate:date};\n    let uploadProgress = data => console.log(data);\n  AliyunOSS.addEventListener('uploadProgress',uploadProgress);\n  AliyunOSS.uploadObjectAsync(upload_conf)\n  .then((resp) => {\n    console.log(resp);\n    AliyunOSS.removeEventListener('uploadProgress',uploadProgress);\n  });\n```\n\n# 注意\nAliyunOSS.initWithKey 只用于测试时方便，正式app中建议不要使用\n\n正式环境请使用服务器签名，app调用AliyunOSS.initWithSigner\n\n详细用法参考index.ios.js中的注释\n\n当前版本只封装了下载功能，后续更新下载功能\n\n",
   "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/lotosbin/react-native-aliyun-oss/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lotosbin/react-native-aliyun-oss.git"
   },
-  "homepage": "https://github.com/lotosbin/react-native-aliyun-oss#readme",
-  "_id": "react-native-aliyun-oss@1.0.0",
-  "_shasum": "b74ca00ab16c306450526ef7f2ff429c8392f2b3",
-  "_from": "git+https://github.com/lesonli/react-native-aliyun-oss.git",
-  "_resolved": "git+https://github.com/lesonli/react-native-aliyun-oss.git#8995696bfa55c285fee262b86693333f1200f6f9"
+  "version": "1.0.0"
 }

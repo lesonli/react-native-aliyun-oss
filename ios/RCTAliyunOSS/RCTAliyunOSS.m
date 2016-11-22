@@ -86,7 +86,7 @@ RCT_EXPORT_METHOD(initWithSigner:(NSString *)AccessKey
 }
 
 //异步下载
-RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKey:(NSString *)objectKey resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKey:(NSString *)objectKey updateDate:(NSString *)updateDate resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     OSSGetObjectRequest *request = [OSSGetObjectRequest new];
     // required
     request.bucketName = bucketName;
@@ -100,14 +100,15 @@ RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKe
     };
     NSString *docDir = [self getDocumentDirectory];
     NSLog(objectKey);
-    request.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:objectKey]];
+    NSURL *url = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:objectKey]];
+    request.downloadToFileURL = url;
     OSSTask *getTask = [client getObject:request];
     [getTask continueWithBlock:^id(OSSTask *task) {
         if (!task.error) {
             NSLog(@"download object success!");
             OSSGetObjectResult *result = task.result;
             NSLog(@"download dota length: %lu", [result.downloadedData length]);
-            resolve(result);
+            resolve(url.absoluteString);
         } else {
             NSLog(@"download object failed, error: %@" ,task.error);
             reject(nil, @"download object failed", task.error);
