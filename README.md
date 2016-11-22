@@ -35,7 +35,7 @@ AliyunOSS.initWithKey(config, endPoint);
 // upload
 const uploadConfig = {
   bucketName: '',
-  sourceFile: '', // local file name
+  sourceFile: '', // local file path
   ossFile: '' // the file path uploaded to oss
 };
 const uploadProgress = p => console.log(p.currentSize / p.totalSize);
@@ -51,7 +51,7 @@ await AliyunOSS.uploadObjectAsync(uploadConfig)
 // download
 const downloadConfig = {
       bucketName: '',
-      ossFile: ''
+      ossFile: '' // the file path on the oss
     };
 const downloadProgress = p => console.log(p.currentSize / p.totalSize);
 AliyunOSS.addEventListener('downloadProgress', downloadProgress);
