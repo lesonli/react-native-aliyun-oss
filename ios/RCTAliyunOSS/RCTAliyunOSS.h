@@ -6,9 +6,9 @@
 //  Copyright © 2016年 lesonli. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "RCTBridgeModule.h"
+#import "RCTEventEmitter.h"
 
-@interface RCTAliyunOSS : NSObject<RCTBridgeModule>
+@interface RCTAliyunOSS : RCTEventEmitter <RCTBridgeModule>
 
 @end

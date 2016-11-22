@@ -8,8 +8,7 @@
 
 #import "RCTAliyunOSS.h"
 #import "RCTLog.h"
-#import "RCTEventDispatcher.h"
-#import <AliyunOSSiOS/OSSService.h>
+#import "OSSService.h"
 
 
 @implementation RCTAliyunOSS{
@@ -18,7 +17,21 @@
  
 }
 
-@synthesize bridge=_bridge;
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"uploadProgress", @"downloadProgress"];
+}
+
+// get local file dir which is readwrite able
+- (NSString *)getDocumentDirectory {
+    NSString * path = NSHomeDirectory();
+    NSLog(@"NSHomeDirectory:%@",path);
+    NSString * userName = NSUserName();
+    NSString * rootPath = NSHomeDirectoryForUser(userName);
+    NSLog(@"NSHomeDirectoryForUser:%@",rootPath);
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
 
 RCT_EXPORT_MODULE()
 
@@ -73,37 +86,66 @@ RCT_EXPORT_METHOD(initWithSigner:(NSString *)AccessKey
 }
 
 //异步下载
-/*RCT_EXPORT_METHOD(downloadObjectAsync:(NSString *)BucketName
-                  ObjectKey:(NSString *)ObjectKey){
-    
-    OSSGetObjectRequest * request = [OSSGetObjectRequest new];
+RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKey:(NSString *)objectKey resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    OSSGetObjectRequest *request = [OSSGetObjectRequest new];
     // required
-    request.bucketName = BucketName;
-    request.objectKey = ObjectKey;
-    
-    //optional
+    request.bucketName = bucketName;
+    request.objectKey = objectKey;
+    // optional
     request.downloadProgress = ^(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
         NSLog(@"%lld, %lld, %lld", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+        [self sendEventWithName: @"downloadProgress" body:@{@"everySentSize":[NSString stringWithFormat:@"%lld",bytesWritten],
+                                                          @"currentSize": [NSString stringWithFormat:@"%lld",totalBytesWritten],
+                                                          @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToWrite]}];
     };
-    // NSString * docDir = [self getDocumentDirectory];
-    // request.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"downloadfile"]];
-    
-    OSSTask * getTask = [client getObject:request];
-    
+    NSString *docDir = [self getDocumentDirectory];
+    NSLog(objectKey);
+    request.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:objectKey]];
+    OSSTask *getTask = [client getObject:request];
     [getTask continueWithBlock:^id(OSSTask *task) {
         if (!task.error) {
             NSLog(@"download object success!");
-            OSSGetObjectResult * getResult = task.result;
-            NSLog(@"download dota length: %lu", [getResult.downloadedData length]);
+            OSSGetObjectResult *result = task.result;
+            NSLog(@"download dota length: %lu", [result.downloadedData length]);
+            resolve(result);
         } else {
             NSLog(@"download object failed, error: %@" ,task.error);
+            reject(nil, @"download object failed", task.error);
         }
         return nil;
     }];
-}*/
+}
+//RCT_EXPORT_METHOD(downloadObjectAsync:(NSString *)BucketName
+//                  ObjectKey:(NSString *)ObjectKey){
+//    
+//    OSSGetObjectRequest * request = [OSSGetObjectRequest new];
+//    // required
+//    request.bucketName = BucketName;
+//    request.objectKey = ObjectKey;
+//    
+//    //optional
+//    request.downloadProgress = ^(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+//        NSLog(@"%lld, %lld, %lld", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+//    };
+//    // NSString * docDir = [self getDocumentDirectory];
+//    // request.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"downloadfile"]];
+//    
+//    OSSTask * getTask = [client getObject:request];
+//    
+//    [getTask continueWithBlock:^id(OSSTask *task) {
+//        if (!task.error) {
+//            NSLog(@"download object success!");
+//            OSSGetObjectResult * getResult = task.result;
+//            NSLog(@"download dota length: %lu", [getResult.downloadedData length]);
+//        } else {
+//            NSLog(@"download object failed, error: %@" ,task.error);
+//        }
+//        return nil;
+//    }];
+//}
 
 //异步上传
-RCT_EXPORT_METHOD(uploadObjectAsync:(NSString *)BucketName
+RCT_REMAP_METHOD(uploadObjectAsync, bucketName:(NSString *)BucketName
                   SourceFile:(NSString *)SourceFile
                   OssFile:(NSString *)OssFile
                   UpdateDate:(NSString *)UpdateDate
@@ -122,11 +164,10 @@ RCT_EXPORT_METHOD(uploadObjectAsync:(NSString *)BucketName
     // optional fields
     put.uploadProgress = ^(int64_t bytesSent, int64_t totalByteSent, int64_t totalBytesExpectedToSend) {
         NSLog(@"%lld, %lld, %lld", bytesSent, totalByteSent, totalBytesExpectedToSend);
-        [self.bridge.eventDispatcher sendAppEventWithName:@"uploadProgress"
-                                                     body:@{
-                                                            @"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
-                                                            @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
-                                                            @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+        [self sendEventWithName: @"uploadProgress" body:@{@"everySentSize":[NSString stringWithFormat:@"%lld",bytesSent],
+                                                          @"currentSize": [NSString stringWithFormat:@"%lld",totalByteSent],
+                                                          @"totalSize": [NSString stringWithFormat:@"%lld",totalBytesExpectedToSend]}];
+
     };
     //put.contentType = @"";
     //put.contentMd5 = @"";
