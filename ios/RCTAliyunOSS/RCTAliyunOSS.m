@@ -116,34 +116,6 @@ RCT_REMAP_METHOD(downloadObjectAsync, bucketName:(NSString *)bucketName objectKe
         return nil;
     }];
 }
-//RCT_EXPORT_METHOD(downloadObjectAsync:(NSString *)BucketName
-//                  ObjectKey:(NSString *)ObjectKey){
-//    
-//    OSSGetObjectRequest * request = [OSSGetObjectRequest new];
-//    // required
-//    request.bucketName = BucketName;
-//    request.objectKey = ObjectKey;
-//    
-//    //optional
-//    request.downloadProgress = ^(int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-//        NSLog(@"%lld, %lld, %lld", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
-//    };
-//    // NSString * docDir = [self getDocumentDirectory];
-//    // request.downloadToFileURL = [NSURL fileURLWithPath:[docDir stringByAppendingPathComponent:@"downloadfile"]];
-//    
-//    OSSTask * getTask = [client getObject:request];
-//    
-//    [getTask continueWithBlock:^id(OSSTask *task) {
-//        if (!task.error) {
-//            NSLog(@"download object success!");
-//            OSSGetObjectResult * getResult = task.result;
-//            NSLog(@"download dota length: %lu", [getResult.downloadedData length]);
-//        } else {
-//            NSLog(@"download object failed, error: %@" ,task.error);
-//        }
-//        return nil;
-//    }];
-//}
 
 //异步上传
 RCT_REMAP_METHOD(uploadObjectAsync, bucketName:(NSString *)BucketName
