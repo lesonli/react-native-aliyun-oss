@@ -7,7 +7,7 @@
 //
 
 #import "RCTBridgeModule.h"
-#import "React/RCTEventEmitter.h"
+#import "RCTEventEmitter.h"
 
 @interface RCTAliyunOSS : RCTEventEmitter <RCTBridgeModule>
 
