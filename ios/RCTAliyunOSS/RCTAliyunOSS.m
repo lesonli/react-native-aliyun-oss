@@ -7,7 +7,7 @@
 //
 
 #import "RCTAliyunOSS.h"
-#import <React/RCTLog.h>
+#import "RCTLog.h"
 #import "OSSService.h"
 
 
