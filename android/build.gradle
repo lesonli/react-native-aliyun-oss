@@ -15,5 +15,5 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.facebook.react:react-native:+'
-    compile files('libs/aliyun-oss-sdk-android-2.3.0.jar')
+    compile 'com.aliyun.dpa:oss-android-sdk:2.4.2'
 }
