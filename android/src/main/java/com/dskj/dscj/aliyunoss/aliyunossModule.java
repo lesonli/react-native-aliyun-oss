@@ -105,10 +105,18 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void uploadObjectAsync(String bucketName, String sourceFile, String ossFile, String updateDate, final Promise promise) {
-// 构造上传请求
+        // 构造上传请求
+        if (sourceFile != null) {
+            //Could not find the source file path like 'file:/storage/emulated/0/Pictures/IMG_20170619_042132-compressed.jpg'
+            //this will cause a ClientException
+            sourceFile = sourceFile.replace("file://", "");
+        }
         PutObjectRequest put = new PutObjectRequest(bucketName, ossFile, sourceFile);
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setHeader("Date",updateDate);
+        metadata.setContentType("application/octet-stream");
+        if(updateDate!=null){
+            metadata.setHeader("Date",updateDate);
+        }
         put.setMetadata(metadata);
 
         // 异步上传时可以设置进度回调
@@ -136,11 +144,14 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion,
+            ServiceException serviceException) {
+                String errorMSG="";
                 // 请求异常
                 if (clientExcepion != null) {
                     // 本地异常如网络异常等
                     clientExcepion.printStackTrace();
+                    errorMSG+="clientException:"+clientExcepion.getMessage();
                 }
                 if (serviceException != null) {
                     // 服务异常
@@ -148,8 +159,9 @@ public class aliyunossModule extends ReactContextBaseJavaModule {
                     Log.e("RequestId", serviceException.getRequestId());
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
+                    errorMSG+=serviceException.getErrorCode()+","+serviceException.getRawMessage();
                 }
-                promise.reject("UploadFaile", "message:123123");
+                promise.reject("UploadFaile", "message:"+errorMSG);
             }
         });
         Log.d("AliyunOSS", "OSS uploadObjectAsync ok!");
